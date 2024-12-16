@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MediaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,27 @@ class Media
 
     #[ORM\Column]
     private array $caste = [];
+
+    /**
+     * @var Collection<int, WatchHistory>
+     */
+    #[ORM\ManyToMany(targetEntity: WatchHistory::class, mappedBy: 'media_id')]
+    private Collection $watchHistories;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'media_id')]
+    private Collection $comment;
+
+    #[ORM\ManyToOne(inversedBy: 'media_id')]
+    private ?CategoryMedia $categoryMedia = null;
+
+    public function __construct()
+    {
+        $this->watchHistories = new ArrayCollection();
+        $this->comment = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +143,75 @@ class Media
     public function setCaste(array $caste): static
     {
         $this->caste = $caste;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WatchHistory>
+     */
+    public function getWatchHistories(): Collection
+    {
+        return $this->watchHistories;
+    }
+
+    public function addWatchHistory(WatchHistory $watchHistory): static
+    {
+        if (!$this->watchHistories->contains($watchHistory)) {
+            $this->watchHistories->add($watchHistory);
+            $watchHistory->addMediaId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWatchHistory(WatchHistory $watchHistory): static
+    {
+        if ($this->watchHistories->removeElement($watchHistory)) {
+            $watchHistory->removeMediaId($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComment(): Collection
+    {
+        return $this->comment;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comment->contains($comment)) {
+            $this->comment->add($comment);
+            $comment->setMediaId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comment->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getMediaId() === $this) {
+                $comment->setMediaId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCategoryMedia(): ?CategoryMedia
+    {
+        return $this->categoryMedia;
+    }
+
+    public function setCategoryMedia(?CategoryMedia $categoryMedia): static
+    {
+        $this->categoryMedia = $categoryMedia;
 
         return $this;
     }
