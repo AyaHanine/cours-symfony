@@ -57,10 +57,15 @@ use Doctrine\ORM\Mapping\InheritanceType;
     #[ORM\ManyToOne(inversedBy: 'media_id')]
     private ?CategoryMedia $categoryMedia = null;
 
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: "media")]
+    #[ORM\JoinTable(name: "category_media_category")]
+    private $categories;
+
     public function __construct()
     {
         $this->watchHistories = new ArrayCollection();
         $this->comment = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int

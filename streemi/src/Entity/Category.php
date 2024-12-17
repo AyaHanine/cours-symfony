@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
@@ -18,6 +19,15 @@ class Category
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $label = null;
+
+    #[ORM\ManyToMany(targetEntity: Media::class, mappedBy: "categories")]
+
+    private $media;
+
+    public function __construct()
+    {
+        $this->media = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
