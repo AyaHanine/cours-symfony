@@ -1,0 +1,42 @@
+App\Entity\Media:
+  media (template):
+    title: "Media <current()>"
+    short_description: "short description"
+    long_description: "<realText()>"
+    release_date: "<datetime()>"
+    cover_image: "https://picsum.photos/400/550?random=<numberBetween(1, 100)>"
+
+App\Entity\Movie:
+  media_movie_{1..50} (extends media):
+    title: "Movie <current()>"
+
+App\Entity\Serie:
+  media_serie_{1..50} (extends media):
+    title: "Serie <current()>"
+
+App\Entity\Season:
+  season_1_{1..3}:
+    number: "<numberBetween(1, 10)>"
+    serie: "@media_serie_<randomElement([1, 50])>"
+
+  season_2_{1..3}:
+    number: "<numberBetween(1, 10)>"
+    serie: "@media_serie_<randomElement([1, 50])>"
+
+  season_3_{1..3}:
+    number: "<numberBetween(1, 10)>"
+    serie: "@media_serie_<randomElement([1, 50])>"
+
+App\Entity\Episode:
+  episode_{1..500}:
+    title: "<sentence()>"
+    duration: "<numberBetween(45, 90)>"
+    releasedAt: "<dateTimeBetween('-1 week', '+1 week')>"
+    season: "@season_*"
+
+App\Entity\WatchHistory:
+  watch_history_{1..500}:
+    last_Watched: "<dateTimeBetween('-1 week', '+1 week')>"
+    number_of_views: "<numberBetween(1, 100)>"
+    user_id: "@user_<randomElement([1, 5])>"
+    media_id: "@media_<randomElement([1, 100])>"

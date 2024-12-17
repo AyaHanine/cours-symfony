@@ -1,0 +1,18 @@
+App\Entity\Playlist:
+  playlist_{1..50}:
+    name: "Playlist <word()>"
+    created_at: '<dateTimeBetween("-1 year", "now")>'
+    updated_at: '<dateTimeBetween("now", "+1 year")>'
+    user_id: "@user_*"
+
+App\Entity\PlaylistMedia:
+  playmedia_{1..500}:
+    added_at: '<dateTimeBetween("-1 year", "now")>'
+    playlist_id: "@playlist_*"
+    media_id: "@media_*"
+
+App\Entity\PlaylistSubscription:
+  playsub_{1..500}:
+    playlist_id: "@playlist_*"
+    user_id: "@user_*"
+    subscriped_at: '<dateTimeBetween("-1 year", "now")>'

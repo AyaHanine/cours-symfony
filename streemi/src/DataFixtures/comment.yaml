@@ -1,0 +1,10 @@
+App\Entity\Comment:
+  comment_template (template):
+    content: "<sentence()>"
+    user_id: "@user_<randomElement([1, 2])>"
+    media_id: "@media_<randomElement([1, 2])>"
+
+  comment_{1..200} (extends comment_template): {}
+
+  comment_with_parent_{1..20} (extends comment_template):
+    parentComment: "@comment_<numberBetween(1, 200)>"
