@@ -16,9 +16,15 @@ class Episode
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\Column]
+    private ?int $duration = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $releasedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?season $session_id = null;
+    private ?Season $season = null;
 
     public function getId(): ?int
     {
@@ -37,14 +43,38 @@ class Episode
         return $this;
     }
 
-    public function getSessionId(): ?season
+    public function getDuration(): ?int
     {
-        return $this->session_id;
+        return $this->duration;
     }
 
-    public function setSessionId(?season $session_id): static
+    public function setDuration(int $duration): static
     {
-        $this->session_id = $session_id;
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getReleasedAt(): ?\DateTimeImmutable
+    {
+        return $this->releasedAt;
+    }
+
+    public function setReleasedAt(\DateTimeImmutable $releasedAt): static
+    {
+        $this->releasedAt = $releasedAt;
+
+        return $this;
+    }
+
+    public function getSeason(): ?Season
+    {
+        return $this->season;
+    }
+
+    public function setSeason(?Season $season): static
+    {
+        $this->season = $season;
 
         return $this;
     }
