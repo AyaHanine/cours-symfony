@@ -10,9 +10,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ListController extends AbstractController
 {
-    /**
-        #[IsGranted('ROLE_USER')]
-    */
+
+    //#[IsGranted('ROLE_USER')]
+
     #[Route('/lists', name: 'page_lists')]
     public function index(
         PlaylistRepository $playlistSubscriptionRepository,
